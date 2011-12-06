@@ -134,7 +134,7 @@ class Downloader(object):
     """Download the file and write it to disk.
 
     Downloads the file based on the given URL.  The file name of the download
-    is included in the header.
+    is included in the header.  Prints the file name to standard out.
 
     Args:
       path: The path segment of the URL to download.
@@ -143,6 +143,7 @@ class Downloader(object):
     in_stream = self._client.request('GET', url)
     file_name = in_stream.getheader(self.FILE_NAME_HEADER)
     file_name = file_name.lstrip(self.TEXT_BEFORE_NAME)
+    print file_name
     out_file = open(file_name, 'w')
     out_file.write(in_stream.read())
 
