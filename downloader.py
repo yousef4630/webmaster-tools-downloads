@@ -45,6 +45,7 @@ class Downloader(object):
     self._client = gdata.webmastertools.service.GWebmasterToolsService()
     self._logged_in = False
     self._language = 'en'
+    self._downloaded = []
 
   def IsLoggedIn(self):
     """Check if client has logged into their Google account yet."""
@@ -95,6 +96,15 @@ class Downloader(object):
       if url:
         self._DownloadFile(url)
 
+  def GetDownloadedFiles(self):
+    """Get a list of downloads that have been written to disk.
+
+    Returns:
+      A list containing the names of all the downloaded files that have been
+      written by this module.
+    """
+    return self._downloaded
+
   def GetCaptchaUrl(self):
     return self._client.captcha_url
 
@@ -143,7 +153,7 @@ class Downloader(object):
     in_stream = self._client.request('GET', url)
     file_name = in_stream.getheader(self.FILE_NAME_HEADER)
     file_name = file_name.lstrip(self.TEXT_BEFORE_NAME)
-    print file_name
+    self._downloaded.append(file_name)
     out_file = open(file_name, 'w')
     out_file.write(in_stream.read())
 
